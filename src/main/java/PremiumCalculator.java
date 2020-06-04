@@ -11,8 +11,8 @@ class PremiumCalculator {
 
     public String calculate(Policy policy) {
         Object house = new Object("House");
-        SubObject tv = new SubObject("TV", new BigDecimal("500.00"), "FIRE");
-        SubObject phone = new SubObject("Phone", new BigDecimal("102.51"), "THEFT");
+        SubObject tv = new SubObject("TV", new BigDecimal("100.00"), "FIRE");
+        SubObject phone = new SubObject("Phone", new BigDecimal("8.00"), "THEFT");
         house.addSubObjectToObject(tv);
         house.addSubObjectToObject(phone);
         policy.addObjectToPolicy(house);
