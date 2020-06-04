@@ -9,10 +9,10 @@ class PremiumCalculator {
         System.out.println(premiumCalculator.calculate(policy));
     }
 
-    public String calculate(Policy policy) {
+    public BigDecimal calculate(Policy policy) {
         Object house = new Object("House");
-        SubObject tv = new SubObject("TV", new BigDecimal("100.00"), "FIRE");
-        SubObject phone = new SubObject("Phone", new BigDecimal("8.00"), "THEFT");
+        SubObject tv = new SubObject("TV", new BigDecimal("500.00"), "FIRE");
+        SubObject phone = new SubObject("Phone", new BigDecimal("102.51"), "THEFT");
         house.addSubObjectToObject(tv);
         house.addSubObjectToObject(phone);
         policy.addObjectToPolicy(house);
@@ -21,16 +21,16 @@ class PremiumCalculator {
         BigDecimal premiumTheft = applyCoefficientToSumInsuredTheft(policy);
         BigDecimal premium = premiumFire.add(premiumTheft);
         BigDecimal roundedPremium = premium.setScale(2,BigDecimal.ROUND_HALF_UP);
-        return roundedPremium + " EUR";
+        return roundedPremium;
     }
 
     public BigDecimal applyCoefficientToSumInsuredFire(Policy policy) {
         BigDecimal sumInsuredFire = getSumInsuredFire(policy);
         BigDecimal coefficientFireByDefault = new BigDecimal("0.014");
-        BigDecimal coefficientFireForSumOverHundred = new BigDecimal("0.024");
+        BigDecimal coefficientFireOverpriced = new BigDecimal("0.024");
         int res = sumInsuredFire.compareTo(new BigDecimal("100.00"));
         if (res > 0) {
-            return sumInsuredFire.multiply(coefficientFireForSumOverHundred);
+            return sumInsuredFire.multiply(coefficientFireOverpriced);
         } else {
             return sumInsuredFire.multiply(coefficientFireByDefault);
         }
@@ -39,10 +39,10 @@ class PremiumCalculator {
     public BigDecimal applyCoefficientToSumInsuredTheft(Policy policy) {
         BigDecimal sumInsuredTheft = getSumInsuredTheft(policy);
         BigDecimal coefficientTheftByDefault = new BigDecimal("0.11");
-        BigDecimal coefficientTheftForSumEqualOrGreaterThanFifteen = new BigDecimal("0.05");
+        BigDecimal coefficientTheftOverpriced = new BigDecimal("0.05");
         int res = sumInsuredTheft.compareTo(new BigDecimal("15.00"));
         if ((res == 0) || (res > 0)) {
-            return sumInsuredTheft.multiply(coefficientTheftForSumEqualOrGreaterThanFifteen);
+            return sumInsuredTheft.multiply(coefficientTheftOverpriced);
         } else {
             return sumInsuredTheft.multiply(coefficientTheftByDefault);
         }
