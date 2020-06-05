@@ -6,7 +6,7 @@ class PremiumCalculator {
     private static final BigDecimal DEFAULT_FIRE_COEFFICIENT = new BigDecimal("0.014");
     private static final BigDecimal OVERPRICED_FIRE_COEFFICIENT = new BigDecimal("0.024");
     private static final BigDecimal DEFAULT_THEFT_COEFFICIENT = new BigDecimal("0.11");
-    private static final BigDecimal OVERPRICED_THEFT_COEFFICIENT = new BigDecimal("0.05");
+    private static final BigDecimal UNDERSTATED_THEFT_COEFFICIENT = new BigDecimal("0.05");
 
     public static void main(String[] args) {
         PremiumCalculator premiumCalculator = new PremiumCalculator();
@@ -16,8 +16,8 @@ class PremiumCalculator {
 
     public BigDecimal calculate(Policy policy) {
         Object house = new Object("House");
-        SubObject tv = new SubObject("TV", new BigDecimal("500.00"), "FIRE");
-        SubObject phone = new SubObject("Phone", new BigDecimal("102.51"), "THEFT");
+        SubObject tv = new SubObject("TV", new BigDecimal("100.00"), "FIRE");
+        SubObject phone = new SubObject("Phone", new BigDecimal("8.00"), "THEFT");
         house.addSubObjectToObject(tv);
         house.addSubObjectToObject(phone);
         policy.addObjectToPolicy(house);
@@ -42,7 +42,7 @@ class PremiumCalculator {
         BigDecimal sumInsuredTheft = getSumInsuredTheft(policy);
         int res = sumInsuredTheft.compareTo(new BigDecimal("15.00"));
         if ((res == 0) || (res > 0)) {
-            return sumInsuredTheft.multiply(OVERPRICED_THEFT_COEFFICIENT);
+            return sumInsuredTheft.multiply(UNDERSTATED_THEFT_COEFFICIENT);
         } else {
             return sumInsuredTheft.multiply(DEFAULT_THEFT_COEFFICIENT);
         }
