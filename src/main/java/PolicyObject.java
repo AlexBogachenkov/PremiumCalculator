@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Object {
+class PolicyObject {
 
     private String objectName;
     List<SubObject> subObjects = new ArrayList<SubObject>(1);
 
-    public Object(String objectName) {
+    public PolicyObject(String objectName) {
         this.objectName = objectName;
     }
 

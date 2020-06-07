@@ -15,7 +15,7 @@ class PremiumCalculator {
     }
 
     public BigDecimal calculate(Policy policy) {
-        Object house = new Object("House");
+        PolicyObject house = new PolicyObject("House");
         SubObject tv = new SubObject("TV", new BigDecimal("100.00"), "FIRE");
         SubObject phone = new SubObject("Phone", new BigDecimal("8.00"), "THEFT");
         house.addSubObjectToObject(tv);
@@ -25,7 +25,7 @@ class PremiumCalculator {
         BigDecimal premiumFire = applyCoefficientToSumInsuredFire(policy);
         BigDecimal premiumTheft = applyCoefficientToSumInsuredTheft(policy);
         BigDecimal premium = premiumFire.add(premiumTheft);
-        return premium.setScale(2,BigDecimal.ROUND_HALF_UP);
+        return premium.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public BigDecimal applyCoefficientToSumInsuredFire(Policy policy) {
@@ -41,7 +41,7 @@ class PremiumCalculator {
     public BigDecimal applyCoefficientToSumInsuredTheft(Policy policy) {
         BigDecimal sumInsuredTheft = getSumInsuredTheft(policy);
         int res = sumInsuredTheft.compareTo(new BigDecimal("15.00"));
-        if ((res == 0) || (res > 0)) {
+        if (res >= 0) {
             return sumInsuredTheft.multiply(UNDERSTATED_THEFT_COEFFICIENT);
         } else {
             return sumInsuredTheft.multiply(DEFAULT_THEFT_COEFFICIENT);
@@ -49,12 +49,12 @@ class PremiumCalculator {
     }
 
     public BigDecimal getSumInsuredFire(Policy policy) {
-        List<Object> policyObjects = policy.getPolicyObjects();
-        BigDecimal sumInsured = new BigDecimal("00.00");
+        List<PolicyObject> policyObjects = policy.getPolicyObjects();
+        BigDecimal sumInsured = BigDecimal.ZERO;
         for (int i = 0; i < policyObjects.size(); i++) {
-            Object tempObject = policyObjects.get(i);
+            PolicyObject tempObject = policyObjects.get(i);
             List<SubObject> subObjects = tempObject.getSubObjects();
-            for (int j = 0; j < subObjects.size(); j++){
+            for (int j = 0; j < subObjects.size(); j++) {
                 SubObject tempSubObject = subObjects.get(j);
                 List<String> riskType = tempSubObject.getRiskType();
                 for (int k = 0; k < riskType.size(); k++) {
@@ -69,12 +69,12 @@ class PremiumCalculator {
     }
 
     public BigDecimal getSumInsuredTheft(Policy policy) {
-        List<Object> policyObjects = policy.getPolicyObjects();
-        BigDecimal sumInsured = new BigDecimal("00.00");
+        List<PolicyObject> policyObjects = policy.getPolicyObjects();
+        BigDecimal sumInsured = BigDecimal.ZERO;
         for (int i = 0; i < policyObjects.size(); i++) {
-            Object tempObject = policyObjects.get(i);
+            PolicyObject tempObject = policyObjects.get(i);
             List<SubObject> subObjects = tempObject.getSubObjects();
-            for (int j = 0; j < subObjects.size(); j++){
+            for (int j = 0; j < subObjects.size(); j++) {
                 SubObject tempSubObject = subObjects.get(j);
                 List<String> riskType = tempSubObject.getRiskType();
                 for (int k = 0; k < riskType.size(); k++) {
@@ -88,7 +88,7 @@ class PremiumCalculator {
         return sumInsured;
     }
 
-    public boolean isFire(SubObject subObject) {
+    public boolean calculateSumInsuredFire(SubObject subObject) {
         List<String> riskType = subObject.getRiskType();
         int count = 0;
         for (String value : riskType) {
@@ -99,7 +99,7 @@ class PremiumCalculator {
         return count > 0;
     }
 
-    public boolean isTheft(SubObject subObject) {
+    public boolean calculateSumInsuredTheft(SubObject subObject) {
         List<String> riskType = subObject.getRiskType();
         int count = 0;
         for (String value : riskType) {
