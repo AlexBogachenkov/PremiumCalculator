@@ -1,27 +1,14 @@
 import java.math.BigDecimal;
 import java.util.List;
 
-class PremiumCalculator {
+public class PremiumCalculator {
 
     private static final BigDecimal DEFAULT_FIRE_COEFFICIENT = new BigDecimal("0.014");
     private static final BigDecimal OVERPRICED_FIRE_COEFFICIENT = new BigDecimal("0.024");
     private static final BigDecimal DEFAULT_THEFT_COEFFICIENT = new BigDecimal("0.11");
     private static final BigDecimal UNDERSTATED_THEFT_COEFFICIENT = new BigDecimal("0.05");
 
-    public static void main(String[] args) {
-        PremiumCalculator premiumCalculator = new PremiumCalculator();
-        Policy policy = new Policy("LV20-02-100000-5", "REGISTERED");
-        System.out.println(premiumCalculator.calculate(policy));
-    }
-
     public BigDecimal calculate(Policy policy) {
-        PolicyObject house = new PolicyObject("House");
-        SubObject tv = new SubObject("TV", new BigDecimal("100.00"), "FIRE");
-        SubObject phone = new SubObject("Phone", new BigDecimal("8.00"), "THEFT");
-        house.addSubObjectToObject(tv);
-        house.addSubObjectToObject(phone);
-        policy.addObjectToPolicy(house);
-
         BigDecimal premiumFire = applyCoefficientToSumInsuredFire(policy);
         BigDecimal premiumTheft = applyCoefficientToSumInsuredTheft(policy);
         BigDecimal premium = premiumFire.add(premiumTheft);
@@ -51,14 +38,11 @@ class PremiumCalculator {
     public BigDecimal getSumInsuredFire(Policy policy) {
         List<PolicyObject> policyObjects = policy.getPolicyObjects();
         BigDecimal sumInsured = BigDecimal.ZERO;
-        for (int i = 0; i < policyObjects.size(); i++) {
-            PolicyObject tempObject = policyObjects.get(i);
+        for (PolicyObject tempObject : policyObjects) {
             List<SubObject> subObjects = tempObject.getSubObjects();
-            for (int j = 0; j < subObjects.size(); j++) {
-                SubObject tempSubObject = subObjects.get(j);
+            for (SubObject tempSubObject : subObjects) {
                 List<String> riskType = tempSubObject.getRiskType();
-                for (int k = 0; k < riskType.size(); k++) {
-                    String tempRiskType = riskType.get(k);
+                for (String tempRiskType : riskType) {
                     if (tempRiskType.equals("FIRE")) {
                         sumInsured = sumInsured.add(tempSubObject.getSumInsured());
                     }
@@ -71,14 +55,11 @@ class PremiumCalculator {
     public BigDecimal getSumInsuredTheft(Policy policy) {
         List<PolicyObject> policyObjects = policy.getPolicyObjects();
         BigDecimal sumInsured = BigDecimal.ZERO;
-        for (int i = 0; i < policyObjects.size(); i++) {
-            PolicyObject tempObject = policyObjects.get(i);
+        for (PolicyObject tempObject : policyObjects) {
             List<SubObject> subObjects = tempObject.getSubObjects();
-            for (int j = 0; j < subObjects.size(); j++) {
-                SubObject tempSubObject = subObjects.get(j);
+            for (SubObject tempSubObject : subObjects) {
                 List<String> riskType = tempSubObject.getRiskType();
-                for (int k = 0; k < riskType.size(); k++) {
-                    String tempRiskType = riskType.get(k);
+                for (String tempRiskType : riskType) {
                     if (tempRiskType.equals("THEFT")) {
                         sumInsured = sumInsured.add(tempSubObject.getSumInsured());
                     }
@@ -86,27 +67,5 @@ class PremiumCalculator {
             }
         }
         return sumInsured;
-    }
-
-    public boolean calculateSumInsuredFire(SubObject subObject) {
-        List<String> riskType = subObject.getRiskType();
-        int count = 0;
-        for (String value : riskType) {
-            if (value.equals("FIRE")) {
-                count += 1;
-            }
-        }
-        return count > 0;
-    }
-
-    public boolean calculateSumInsuredTheft(SubObject subObject) {
-        List<String> riskType = subObject.getRiskType();
-        int count = 0;
-        for (String value : riskType) {
-            if (value.equals("THEFT")) {
-                count += 1;
-            }
-        }
-        return count > 0;
     }
 }
