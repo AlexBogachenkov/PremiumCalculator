@@ -1,0 +1,19 @@
+To solve the task, PremiumCalculator, Policy, PolicyObject, SubObject, Coefficient, TheftCoefficient
+FireCoefficient classes were created.
+
+The PremiumCalculator class is the main one and also serves as the starting point for all functionality. To
+calculate premium for all police objects, method calculate() was created. It calls other methods such as
+getSumInsured(Policy policy, String riskType) and applyCoefficientToSumInsured(Policy policy, Coefficient coefficient)
+that calculate the sum of all insured objects of the same risk type and apply the corresponding coefficients
+to the sum.
+
+For the policy, object and sub-object implementation Policy, PolicyObject and SubObject classes were created.
+Each of these classes has a list of its sub objects, for example Policy - policy objects, PolicyObject - sub-objects,
+SubObject - risk type, which allows at any time to change the number of policy objects, sub-objects or risk types.
+
+For the coefficient and risk type implementation FireCoefficient and TheftCoefficient classes were created, that
+extends Coefficient class. apply(BigDecimal sum) methods in the heir-classes apply desired coefficient to the sum.
+This approach makes it easy to add a new type of risk, if necessary, which was an important point in the description
+of the task.
+
+For currency calculation class BigDecimal is used, which helps to avoid rounding errors.
