@@ -1,7 +1,8 @@
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
-public class PremiumCalculator {
+class PremiumCalculator {
 
     private static final BigDecimal DEFAULT_FIRE_COEFFICIENT = new BigDecimal("0.014");
     private static final BigDecimal OVERPRICED_FIRE_COEFFICIENT = new BigDecimal("0.024");
@@ -12,7 +13,7 @@ public class PremiumCalculator {
         BigDecimal premiumFire = applyCoefficientToSumInsuredFire(policy);
         BigDecimal premiumTheft = applyCoefficientToSumInsuredTheft(policy);
         BigDecimal premium = premiumFire.add(premiumTheft);
-        return premium.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return premium.setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal applyCoefficientToSumInsuredFire(Policy policy) {
